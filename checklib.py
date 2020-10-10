@@ -5,4 +5,6 @@ class Checker:
 
 	def check(self):
 		code = self.code
-		print(code.read())
+		for i, line in enumerate(code):
+			if i > 3:
+				print(line, end='')
