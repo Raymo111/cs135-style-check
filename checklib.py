@@ -2,7 +2,9 @@ import re
 
 import Strings
 
-global DEBUG
+DEBUG = None
+warncount = 0
+errcount = 0
 
 
 class Checker:
@@ -24,6 +26,12 @@ class Checker:
 				error(i, e.FILELABEL)
 			if i == 8 and not isBlank(line):
 				warn(i, w.LINENOTBLANK)
+		if warncount == 0 and errcount == 0:
+			print("All good! No errors or warnings.")
+		elif errcount == 0:
+			print(f"Total {warncount} warnings and no errors. Double-check your code!")
+		else:
+			print(f"Total {errcount} errors and {'no' if warncount == 0 else warncount} warnings. Fix up your code!")
 
 
 # Output functions
@@ -31,12 +39,16 @@ def warn(line, warning):
 	if DEBUG:
 		prepend = "> "
 	print(f"{prepend}Warning (line {line}): {warning}")
+	global warncount
+	warncount += 1
 
 
-def error(line, error):
+def error(line, err):
 	if DEBUG:
 		prepend = "> "
-	print(f"{prepend}Error (line {line}): {error}")
+	print(f"{prepend}Error (line {line}): {err}")
+	global errcount
+	errcount += 1
 
 
 # Helper functions
