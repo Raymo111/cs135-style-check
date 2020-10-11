@@ -4,3 +4,4 @@ class StyleWarning():
 
 class StyleError():
 	STUDENTNUM = "Missing Student ID"
+	FILELABEL = "Missing Assignment/Problem number"
