@@ -1,7 +1,7 @@
+import argparse
 import sys
 
 import checklib
-import argparse
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Check the style of a racket file')
@@ -11,11 +11,13 @@ if __name__ == '__main__':
 
 	try:
 		if args.debug:
-			print("In debug mode: output will go brrrrrrrrrrrr")
+			print("In debug mode: output will go brrrrrrrrrrrrr")
+			checklib.DEBUG = args.debug
 		else:
 			sys.tracebacklimit = 0
 		with open(args.file) as file:
-			checker = checklib.Checker(file, args.debug)
+			code = file.read().splitlines(True)
+			checker = checklib.Checker(code[3:])  # Lines 0,1,2 are autoinserted by DrRacket
 			checker.check()
 	except KeyboardInterrupt:
 		print("\nBYE!")
