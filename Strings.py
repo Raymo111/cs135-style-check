@@ -10,3 +10,4 @@ class StyleError:
 	LINETOOLONG = "Over 80 characters"
 	WHITESPACE = "Whitespace issue"
 	FULLLINECOMMENT = "Full-line comments should start with 2 semicolons"
+	ELSECOND = "Else should not have conditionals inside"

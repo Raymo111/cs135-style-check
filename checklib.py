@@ -32,6 +32,9 @@ class Checker:
 				error(e.WHITESPACE, i)
 			if checkComment(line):
 				error(e.FULLLINECOMMENT, i)
+			if checkElseCond(line):
+				error(e.ELSECOND, i)
+			
 		# TODO warn on len(identifier) < 3
 
 		if warncount == 0 and errcount == 0:
@@ -116,6 +119,11 @@ def checkWhitespace(line):
 		return commonIssue
 	else:
 		return line.isspace() or tooManyTogether or commonIssue
+
+# checks for design error of having cond in else bracket
+def checkElseCond(line):
+	elseCond = re.search(r"\[else \(cond", line)
+	return elseCond
 
 
 # Full-line comments should use 2 semicolons
