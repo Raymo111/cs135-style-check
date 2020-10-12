@@ -15,7 +15,7 @@ class Checker:
 		w = Strings.StyleWarning
 		e = Strings.StyleError
 		code = self.code
-		if not checkConstant(code):
+		if not checkForConstant(code):
 			warn(w.MISSINGCONSTANTS)
 		for i, line in enumerate(code, 1):
 			# if DEBUG:
@@ -32,10 +32,14 @@ class Checker:
 				error(e.WHITESPACE, i)
 			if checkComment(line):
 				error(e.FULLLINECOMMENT, i)
+			if checkConstLen(line):
+				warn(w.CONSTLEN, i)
+			if not checkConstUsage(code, line):
+				error(e.CONSTNOTUSED, i)
+			if i == len(code) and isBlank(code[i - 1]):
+				error(e.LINEBLANK)
 			if checkElseCond(line):
-				error(e.ELSECOND, i)
-			
-		# TODO warn on len(identifier) < 3
+				error(e.ELSECOND)
 
 		if warncount == 0 and errcount == 0:
 			print("All good! No errors or warnings.")
@@ -66,7 +70,19 @@ def isComment(line):
 
 
 def isBlank(line):
-	return line in ['\n', '\r\n']
+	return not line or line in ['\n', '\r\n']
+
+
+def isConstant(line):
+	return line.startswith("(define ") and line[8] != '('
+
+
+def getOccurrences(code, string):
+	occ = []
+	for i, line in enumerate(code):
+		if string in line:
+			occ.append(i)
+	return occ
 
 
 def fmtPrint(line):
@@ -83,7 +99,7 @@ def fmtPrint(line):
 
 # Check functions
 # Check for 8-digit UWaterloo student number
-def checkConstant(code):
+def checkForConstant(code):
 	for i, line in enumerate(code):
 		if line.startswith("(define ("):
 			if DEBUG:
@@ -130,3 +146,16 @@ def checkElseCond(line):
 def checkComment(line):
 	if not isComment(line):
 		return line.startswith(';')
+
+
+# Constants shouldn't be <3 chars
+def checkConstLen(line):
+	if isConstant(line):
+		return len(line.split()[1]) < 3
+
+
+# Constants shouldn't be unused
+def checkConstUsage(code, line):
+	if isConstant(line):
+		return len(getOccurrences(code, line.split()[1])) > 1
+	return True
