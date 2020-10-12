@@ -1,12 +1,16 @@
 class StyleWarning:
-	MISSINGCONSTANTS = "You don't have any constants"
+	CONSTLEN = "Constant too crpytic"
 	LINENOTBLANK = "Should be blank"
+	MISSINGCONSTANTS = "You don't have any constants"
 	MISSINGREQ = "You don't have a Requires statement"
 
 
 class StyleError:
-	STUDENTNUM = "Missing Student ID"
+	CONSTNOTUSED = "Unused constant"
+	EOFNOTBLANK = "Missing blank last line"
+	LINEBLANK = "Extra blank line"
 	FILELABEL = "Missing Assignment/Problem number"
-	LINETOOLONG = "Over 80 characters"
-	WHITESPACE = "Whitespace issue"
 	FULLLINECOMMENT = "Full-line comments should start with 2 semicolons"
+	LINETOOLONG = "Over 80 characters"
+	STUDENTNUM = "Missing Student ID"
+	WHITESPACE = "Whitespace issue"
