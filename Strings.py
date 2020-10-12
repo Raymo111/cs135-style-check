@@ -1,6 +1,7 @@
 class StyleWarning:
-	MISSINGREQ = "Missing Requires statement"
+	MISSINGCONSTANTS = "You don't have any constants"
 	LINENOTBLANK = "Should be blank"
+	MISSINGREQ = "You don't have a Requires statement"
 
 
 class StyleError:

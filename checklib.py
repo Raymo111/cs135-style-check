@@ -15,19 +15,21 @@ class Checker:
 		w = Strings.StyleWarning
 		e = Strings.StyleError
 		code = self.code
+		if not checkConstant(code):
+			warn(w.MISSINGCONSTANTS)
 		for i, line in enumerate(code, 1):
 			# if DEBUG:
 			# 	print(line, end='')
 			if len(line) > 80:
-				error(i, e.LINETOOLONG)
+				error(e.LINETOOLONG, i)
 			if i == 3 and not checkStudentNum(line):
-				error(i, e.STUDENTNUM)
+				error(e.STUDENTNUM, i)
 			if i == 5 and not checkFileLabel(line):
-				error(i, e.FILELABEL)
+				error(e.FILELABEL, i)
 			if i == 8 and not isBlank(line):
-				warn(i, w.LINENOTBLANK)
+				warn(w.LINENOTBLANK, i)
 			if checkWhitespace(line):
-				error(i, e.WHITESPACE)
+				error(e.WHITESPACE, i)
 		if warncount == 0 and errcount == 0:
 			print("All good! No errors or warnings.")
 		elif errcount == 0:
@@ -37,18 +39,16 @@ class Checker:
 
 
 # Output functions
-def warn(line, warning):
-	if DEBUG:
-		prepend = "> "
-	print(f"{prepend}Warning (line {line + 3 if DEBUG else 0}): {warning}")
+def warn(warning, line=None):
+	fmt = fmtPrint(line)
+	print(f"{fmt[0]}Warning{fmt[1]}: {warning}")
 	global warncount
 	warncount += 1
 
 
-def error(line, err):
-	if DEBUG:
-		prepend = "> "
-	print(f"{prepend}Error (line {line + 3 if DEBUG else 0}): {err}")
+def error(err, line=None):
+	fmt = fmtPrint(line)
+	print(f"{fmt[0]}Error{fmt[1]}: {err}")
 	global errcount
 	errcount += 1
 
@@ -62,8 +62,31 @@ def isBlank(line):
 	return line in ['\n', '\r\n']
 
 
+def fmtPrint(line):
+	if DEBUG:
+		prepend = "> "
+	else:
+		prepend = ''
+	if line is not None:
+		lineInfo = f" (line {line + 3 if DEBUG else 0})"
+	else:
+		lineInfo = ''
+	return [prepend, lineInfo]
+
+
 # Check functions
 # Check for 8-digit UWaterloo student number
+def checkConstant(code):
+	for i, line in enumerate(code):
+		if line.startswith("(define ("):
+			if DEBUG:
+				print(f"First function at line {i + 4}")
+			for j in range(i - 1, 1, -1):
+				if code[j].startswith("(define "):
+					return True
+			return False
+
+
 def checkStudentNum(line):
 	res = re.search(r"\(\d{8}\)", line)
 	return res and isComment(line)
@@ -73,13 +96,6 @@ def checkStudentNum(line):
 def checkFileLabel(line):
 	res = re.search(r"Assignment \d+, Problem \d+", line)
 	return res and isComment(line)
-
-
-def checkConstant(code):
-	for i, line in enumerate(code):
-		if line.startswith("(define ("):
-			# TODO Backtrack
-			return True
 
 
 def checkWhitespace(line):
