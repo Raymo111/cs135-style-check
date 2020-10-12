@@ -5,6 +5,7 @@ import Strings
 DEBUG = None
 warncount = 0
 errcount = 0
+functionIdentifiers = []
 
 
 class Checker:
@@ -99,6 +100,7 @@ def fmtPrint(line):
 
 # Check functions
 # Check for 8-digit UWaterloo student number
+
 def checkForConstant(code):
 	for i, line in enumerate(code):
 		if line.startswith("(define ("):
@@ -136,6 +138,7 @@ def checkWhitespace(line):
 	else:
 		return line.isspace() or tooManyTogether or commonIssue
 
+
 # checks for design error of having cond in else bracket
 def checkElseCond(line):
 	elseCond = re.search(r"\[else \(cond", line)
@@ -159,3 +162,19 @@ def checkConstUsage(code, line):
 	if isConstant(line):
 		return len(getOccurrences(code, line.split()[1])) > 1
 	return True
+
+
+def checkPurposeExists(line):
+	pass
+
+
+def checkContractExists(line):
+	pass
+
+
+def checkExamplesExist(line):
+	pass
+
+
+def checkRequiresExist(line):
+	pass
