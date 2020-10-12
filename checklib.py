@@ -30,6 +30,10 @@ class Checker:
 				warn(w.LINENOTBLANK, i)
 			if checkWhitespace(line):
 				error(e.WHITESPACE, i)
+			if checkComment(line):
+				error(e.FULLLINECOMMENT, i)
+		# TODO warn on len(identifier) < 3
+
 		if warncount == 0 and errcount == 0:
 			print("All good! No errors or warnings.")
 		elif errcount == 0:
@@ -111,4 +115,10 @@ def checkWhitespace(line):
 	elif isComment(line):
 		return commonIssue
 	else:
-		return tooManyTogether or commonIssue
+		return line.isspace() or tooManyTogether or commonIssue
+
+
+# Full-line comments should use 2 semicolons
+def checkComment(line):
+	if not isComment(line):
+		return line.startswith(';')

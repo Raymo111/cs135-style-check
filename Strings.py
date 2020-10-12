@@ -9,3 +9,4 @@ class StyleError:
 	FILELABEL = "Missing Assignment/Problem number"
 	LINETOOLONG = "Over 80 characters"
 	WHITESPACE = "Whitespace issue"
+	FULLLINECOMMENT = "Full-line comments should start with 2 semicolons"
