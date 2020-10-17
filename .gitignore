@@ -126,3 +126,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Test Files
+alternate.txt
+alternate.bak

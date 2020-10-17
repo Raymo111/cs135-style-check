@@ -5,6 +5,7 @@ import Strings
 DEBUG = None
 warncount = 0
 errcount = 0
+functionIdentifiers = []
 
 
 class Checker:
@@ -29,7 +30,7 @@ class Checker:
 			if i == 8 and not isBlank(line):
 				warn(w.LINENOTBLANK, i)
 			if checkWhitespace(line):
-				error(e.WHITESPACE, i)
+				warn(w.WHITESPACE, i)
 			if checkComment(line):
 				error(e.FULLLINECOMMENT, i)
 			if checkConstLen(line):
@@ -38,6 +39,8 @@ class Checker:
 				error(e.CONSTNOTUSED, i)
 			if i == len(code) and isBlank(code[i - 1]):
 				error(e.LINEBLANK)
+			if checkElseCond(line):
+				error(e.ELSECOND)
 
 		if warncount == 0 and errcount == 0:
 			print("All good! No errors or warnings.")
@@ -87,16 +90,17 @@ def fmtPrint(line):
 	if DEBUG:
 		prepend = "> "
 	else:
-		prepend = ''
+		prepend = ""
 	if line is not None:
-		lineInfo = f" (line {line + 3 if DEBUG else 0})"
+		lineInfo = f" (line {line + (3 if DEBUG else 0)})"
 	else:
-		lineInfo = ''
+		lineInfo = ""
 	return [prepend, lineInfo]
 
 
 # Check functions
 # Check for 8-digit UWaterloo student number
+
 def checkForConstant(code):
 	for i, line in enumerate(code):
 		if line.startswith("(define ("):
@@ -135,6 +139,12 @@ def checkWhitespace(line):
 		return line.isspace() or tooManyTogether or commonIssue
 
 
+# checks for design error of having cond in else bracket
+def checkElseCond(line):
+	elseCond = re.search(r"\[else \(cond", line)
+	return elseCond
+
+
 # Full-line comments should use 2 semicolons
 def checkComment(line):
 	if not isComment(line):
@@ -152,3 +162,19 @@ def checkConstUsage(code, line):
 	if isConstant(line):
 		return len(getOccurrences(code, line.split()[1])) > 1
 	return True
+
+
+def checkPurposeExists(line):
+	pass
+
+
+def checkContractExists(line):
+	pass
+
+
+def checkExamplesExist(line):
+	pass
+
+
+def checkRequiresExist(line):
+	pass
