@@ -8,11 +8,11 @@ class StyleWarning:
 
 class StyleError:
 	CONSTNOTUSED = "Unused constant"
+	ELSECOND = "Else should not have conditionals inside"
 	EOFNOTBLANK = "Missing blank last line"
-	LINEBLANK = "Extra blank line"
 	FILELABEL = "Missing Assignment/Problem number"
 	FULLLINECOMMENT = "Full-line comments should start with 2 semicolons"
+	LINEBLANK = "Extra blank line"
 	LINETOOLONG = "Over 80 characters"
+	MISSINGEOF = "You don't have an empty last line"
 	STUDENTNUM = "Missing Student ID"
-	FULLLINECOMMENT = "Full-line comments should start with 2 semicolons"
-	ELSECOND = "Else should not have conditionals inside"

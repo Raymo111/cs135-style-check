@@ -6,7 +6,7 @@ DEBUG = None
 warncount = 0
 errcount = 0
 functionIdentifiers = []
-
+lengthLim = 80
 
 class Checker:
 	def __init__(self, code=None):
@@ -21,7 +21,7 @@ class Checker:
 		for i, line in enumerate(code, 1):
 			# if DEBUG:
 			# 	print(line, end='')
-			if len(line) > 80:
+			if len(line.rstrip()) > lengthLim:
 				error(e.LINETOOLONG, i)
 			if i == 3 and not checkStudentNum(line):
 				error(e.STUDENTNUM, i)
@@ -38,7 +38,9 @@ class Checker:
 			if not checkConstUsage(code, line):
 				error(e.CONSTNOTUSED, i)
 			if i == len(code) and isBlank(code[i - 1]):
-				error(e.LINEBLANK)
+				error(e.LINEBLANK, len(code))
+			if i == len(code) and line.rstrip() == line:
+				error(e.MISSINGEOF, len(code))
 			if checkElseCond(line):
 				error(e.ELSECOND)
 
@@ -71,7 +73,7 @@ def isComment(line):
 
 
 def isBlank(line):
-	return not line or line in ['\n', '\r\n']
+	return not line or line.rstrip() == ""
 
 
 def isConstant(line):
